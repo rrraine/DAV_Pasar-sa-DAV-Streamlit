@@ -56,7 +56,7 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 
-tab1, tab2, tab3, tab4 = st.tabs(["Overview and Dataset", "Data Exploration", "Analysis", "Insights"])
+tab1, tab2, tab3, tab4 = st.tabs(["   Overview   ", "   Data Exploration   ", "   Analysis   ", "   Insights   "])
 
 with tab1:
     tab_overview.render()
@@ -69,5 +69,83 @@ with tab3:
 
 with tab4:
     tab_insights.render()
+
+
+# Option 2: Using a selectbox in the sidebar
+
+# Page config
+# st.set_page_config(
+#     page_title="DPWH Flood Control Streamlit App",
+#     layout="wide"
+# )
+
+# st.title("DPWH Flood Control Projects - Data Analysis Dashboard")
+
+# st.markdown("""
+# <style>
+# /* Make radio look like vertical buttons */
+# div[role="radiogroup"] > label {
+#     background: #f0f0f0;
+#     padding: 12px 16px;
+#     border-radius: 8px;
+#     margin-bottom: 6px;
+#     width: 100%;
+#     display: block;
+#     border: 1px solid #d0d0d0;
+#     cursor: pointer;
+#     color: #003366;
+#     font-size: 16px;
+# }
+
+# /* Selected state */
+# div[role="radiogroup"] > label[data-baseweb="radio"] > div:first-child {
+#     background: #003366 !important;
+#     color: white !important;
+#     font-weight: bold;
+# }
+# </style>
+# """, unsafe_allow_html=True)
+
+
+# # ---------------------------------------
+# # Sidebar-like vertical tabs using radio
+# # ---------------------------------------
+
+# # Define available views
+# pages = {
+#     "Overview and Dataset": "overview",
+#     "Data Exploration": "exploration",
+#     "Analysis": "analysis",
+#     "Insights": "insights"
+# }
+
+# # ---- Layout: 2 columns (sidebar + content)
+# col_sidebar, col_content = st.columns([1, 4])
+
+# with col_sidebar:
+#     st.markdown("### 📁 Sections")
+
+#     # Radio button selection (vertical tabs)
+#     selected_page = st.radio(
+#         "",
+#         list(pages.keys()),
+#         label_visibility="collapsed",
+#     )
+
+# # ---------------------------------------
+# # CONTENT AREA (right column)
+# # ---------------------------------------
+# with col_content:
+#     if selected_page == "Overview and Dataset":
+#         tab_overview.render()
+
+#     elif selected_page == "Data Exploration":
+#         tab_dataexploration.render()
+
+#     elif selected_page == "Analysis":
+#         tab_analysis.render()
+
+#     elif selected_page == "Insights":
+#         tab_insights.render()
 
 
