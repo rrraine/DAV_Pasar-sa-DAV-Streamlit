@@ -41,13 +41,13 @@ def display_dataset_info(df):
 
     with st.expander("Show Detailed Dataset Information", expanded=False):
         st.write("### 📌 Data Summary")
-        st.write(df.describe(include="all"))
+        st.write(df_clean.describe(include="all"))
 
         st.write("### 🔢 Numeric Summary")
-        st.write(df.describe())
+        st.write(df_clean.describe())
 
         st.write("### ❗ Missing Values")
-        st.write(df.isnull().sum())
+        st.write(df_clean.isnull().sum())
 
     st.divider()
 
