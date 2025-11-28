@@ -2,12 +2,16 @@
 import streamlit as st
 import pandas as pd
 import plotly.express as px
+from pathlib import Path
 
 # -------------------------
 # Load dataset once
 # -------------------------
 def load_dataset():
-    df = pd.read_csv("data/dpwhfloodcontrol.csv")
+    BASE_DIR = Path(__file__).resolve().parent
+    FILE_PATH = BASE_DIR.parent / 'data' / 'dpwhfloodcontrol.csv'
+
+    df = pd.read_csv(FILE_PATH)
     df = df.loc[:, ~df.columns.str.startswith("Unnamed")]
     df = df.rename(columns={
         "FundingYear": "Year",

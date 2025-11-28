@@ -1,6 +1,7 @@
 # tab_overview.py
 import streamlit as st
 import pandas as pd
+from pathlib import Path
 
 def display_title_and_overview():
     # st.title("Overview and Dataset")
@@ -17,10 +18,10 @@ def display_title_and_overview():
 
 
 def load_dataset():
-    st.subheader("Dataset")
-    
-    file_path = "data/dpwhfloodcontrol.csv"
-    df = pd.read_csv(file_path)
+    BASE_DIR = Path(__file__).resolve().parent
+    FILE_PATH = BASE_DIR.parent / 'data' / 'dpwhfloodcontrol.csv'
+
+    df = pd.read_csv(FILE_PATH)
     return df
 
     # try:
