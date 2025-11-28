@@ -3,9 +3,6 @@ import streamlit as st
 import pandas as pd
 import plotly.express as px
 
-# -------------------------
-# Load dataset once
-# -------------------------
 def load_dataset():
     df = pd.read_csv("data/dpwhfloodcontrol.csv")
     df = df.loc[:, ~df.columns.str.startswith("Unnamed")]
