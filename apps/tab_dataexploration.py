@@ -3,9 +3,6 @@ import streamlit as st
 import pandas as pd
 import plotly.express as px
 
-# -------------------------
-# Load dataset once
-# -------------------------
 def load_dataset():
     df = pd.read_csv("data/dpwhfloodcontrol.csv")
     df = df.loc[:, ~df.columns.str.startswith("Unnamed")]
@@ -66,21 +63,87 @@ def filter_dataset(df):
 # Key Statistics
 def display_key_statistics(df):
     st.subheader("Key Statistics")
-    stats = pd.DataFrame({
-        "Metric": [
-            "Total Projects",
-            "Total Budget",
-            "Average Budget per Project",
-            "Number of Regions",
+
+    budget_col = "Budget" # ApprovedBudgetForContract
+    cost_col = "ContractCost"
+
+    # st.write("Columns detected:", df.columns.tolist())
+
+    # Check if columns exist
+    if budget_col not in df.columns or cost_col not in df.columns:
+        st.error("Dataset must contain 'ApprovedBudgetForContract' and 'ContractCost' columns.")
+        return
+
+    #Convert to numeric (handles TypeError from strings) 
+    df[budget_col] = pd.to_numeric(df[budget_col], errors="coerce")
+    df[cost_col] = pd.to_numeric(df[cost_col], errors="coerce")
+
+    # Helper for peso formatting
+    def peso(x):
+        try:
+            return f"₱{x:,.2f}"
+        except:
+            return "N/A"
+
+
+    stats = {
+        "Statistic": [
+            "Mean (Average)",
+            "Mode",
+            "Standard Deviation (STD)",
+            "Variance",
+            "Minimum (Min)",
+            "Maximum (Max)",
+            "Range (Max - Min)",
+            "25th Percentile (Q1)",
+            "50th Percentile (Median)",
+            "75th Percentile (Q3)"
         ],
-        "Value": [
-            len(df),
-            df["Budget"].sum() if "Budget" in df.columns else "N/A",
-            df["Budget"].mean() if "Budget" in df.columns else "N/A",
-            df["Region"].nunique() if "Region" in df.columns else "N/A"
+        budget_col: [
+            peso(df[budget_col].mean()),
+            peso(df[budget_col].mode().iloc[0]),
+            peso(df[budget_col].std()),
+            f"{df[budget_col].var():.2e}",
+            peso(df[budget_col].min()),
+            peso(df[budget_col].max()),
+            peso(df[budget_col].max() - df[budget_col].min()),
+            peso(df[budget_col].quantile(0.25)),
+            peso(df[budget_col].median()),
+            peso(df[budget_col].quantile(0.75)),
+        ],
+        cost_col: [
+            peso(df[cost_col].mean()),
+            peso(df[cost_col].mode().iloc[0]),
+            peso(df[cost_col].std()),
+            f"{df[cost_col].var():.2e}",
+            peso(df[cost_col].min()),
+            peso(df[cost_col].max()),
+            peso(df[cost_col].max() - df[cost_col].min()),
+            peso(df[cost_col].quantile(0.25)),
+            peso(df[cost_col].median()),
+            peso(df[cost_col].quantile(0.75)),
+        ],
+        "Interpretation": [
+            "On average, contract costs are slightly lower than the approved budgets, indicating cost savings.",
+            "Both have the same most frequent value, suggesting a standard cost level.",
+            "Variability in approved budgets and contract costs is nearly the same.",
+            "Variances confirm similar dispersion.",
+            "Smallest contract cost is slightly lower than the smallest approved budget.",
+            "Maximum contract cost is lower than the maximum approved budget.",
+            "Approved budgets have a wider range than contract costs.",
+            "25% of projects have lower budgets and even lower contract costs.",
+            "Median values are nearly identical, showing good budget alignment.",
+            "Upper-end projects show contract costs slightly lower than budgets."
         ]
-    })
-    st.table(stats)
+    }
+
+    # Convert to DataFrame
+    stats_df = pd.DataFrame(stats)
+
+    # Display nicely
+    st.dataframe(stats_df, use_container_width=True)
+
+
 
 
 # Heatmap, Boxplot, Histogram
