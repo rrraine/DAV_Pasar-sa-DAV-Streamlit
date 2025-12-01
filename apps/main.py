@@ -6,7 +6,6 @@ import numpy as np
 import matplotlib.pyplot as plt 
 import plotly.express as px #pip install plotly if needed
 
-
 import tab_overview
 import tab_dataexploration
 import tab_analysis
@@ -21,6 +20,21 @@ st.set_page_config(
 
 
 st.title("DPWH Flood Control Projects - Data Analysis Dashbaord")
+
+def load_dataset():
+    df = pd.read_csv("data/dpwhfloodcontrol.csv")
+    df = df.loc[:, ~df.columns.str.startswith("Unnamed")]
+    df = df.rename(columns={
+        "FundingYear": "Year",
+        "ApprovedBudgetForContract": "Budget"
+    })
+    # Ensure correct types
+    if "Year" in df.columns:
+        df["Year"] = pd.to_numeric(df["Year"], errors="coerce")
+    if "Budget" in df.columns:
+        df["Budget"] = pd.to_numeric(df["Budget"], errors="coerce")
+    return df
+
 
 
 # Dataset | to reuse in all tabs
