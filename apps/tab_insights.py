@@ -2,31 +2,32 @@ import streamlit as st
 from pathlib import Path
 import pandas as pd
 import plotly.express as px
+from utils import load_dataset
 
 
-@st.cache_data
-def load_dataset():
-    BASE_DIR = Path(__file__).resolve().parent
-    FILE_PATH = BASE_DIR.parent / 'data' / 'dpwhfloodcontrol.csv'
+# @st.cache_data
+# def load_dataset():
+#     BASE_DIR = Path(__file__).resolve().parent
+#     FILE_PATH = BASE_DIR.parent / 'data' / 'dpwhfloodcontrol.csv'
 
-    df = pd.read_csv(FILE_PATH)
-    df = df.loc[:, ~df.columns.str.startswith("Unnamed")]
-    df = df.rename(columns={
-        "FundingYear": "Year",
-        "ApprovedBudgetForContract": "Budget"
-    })
-    # Ensure correct types
-    if "Year" in df.columns:
-        df["Year"] = pd.to_numeric(df["Year"], errors="coerce")
-    if "Budget" in df.columns:
-        df["Budget"] = pd.to_numeric(df["Budget"], errors="coerce")
+#     df = pd.read_csv(FILE_PATH)
+#     df = df.loc[:, ~df.columns.str.startswith("Unnamed")]
+#     df = df.rename(columns={
+#         "FundingYear": "Year",
+#         "ApprovedBudgetForContract": "Budget"
+#     })
+#     # Ensure correct types
+#     if "Year" in df.columns:
+#         df["Year"] = pd.to_numeric(df["Year"], errors="coerce")
+#     if "Budget" in df.columns:
+#         df["Budget"] = pd.to_numeric(df["Budget"], errors="coerce")
 
-    #Data Cleaning
-    #Converting 'ContractCost' to numeric
-    cost_col = 'ContractCost'
-    df[cost_col] = pd.to_numeric(df[cost_col], errors="coerce")
+#     #Data Cleaning
+#     #Converting 'ContractCost' to numeric
+#     cost_col = 'ContractCost'
+#     df[cost_col] = pd.to_numeric(df[cost_col], errors="coerce")
 
-    return df
+#     return df
 
 # Helper Functions
 #region
@@ -53,7 +54,7 @@ def key_insights(df):
         peak_budget = 0
         peak_year = "N/A"
     col_total_cost, col_peak_budget, col_total_projects = st.columns(3)
-    
+
     with col_total_cost:
         with st.container(border=True, horizontal_alignment="center"):
             st.subheader("Total Cost")
