@@ -19,7 +19,7 @@ st.set_page_config(
 )
 
 
-st.title("DPWH Flood Control Projects - Data Analysis Dashbaord")
+st.title("DPWH Flood Control Projects - Data Analysis Dashboard")
 
 def load_dataset():
     df = pd.read_csv("data/dpwhfloodcontrol.csv")

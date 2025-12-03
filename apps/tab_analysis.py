@@ -8,6 +8,10 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.impute import SimpleImputer
 from sklearn.decomposition import PCA
 import plotly.express as px
+from streamlit import container
+
+from style_manager import inject_global_css
+
 
 # ---------------------------------------------------------
 # Helpers
@@ -79,7 +83,7 @@ def load_dataset(path="data/dpwhfloodcontrol.csv"):
 # Main render
 # ---------------------------------------------------------
 def render():
-
+    inject_global_css()
     st.title("K-Means Clustering with PCA Visualization")
 
     df = load_dataset()
@@ -170,9 +174,6 @@ def render():
     centroids = pd.DataFrame(kmeans.cluster_centers_, columns=selected_features)
     st.dataframe(centroids, use_container_width=True)
 
-# Run
-if __name__ == "__main__":
-    render()
     st.title("Analysis Dashboard")
     st.write(
         "This section presents the regression analyses examining how "
@@ -200,23 +201,37 @@ if __name__ == "__main__":
 
         # Metrics row
         c1, c2, c3 = st.columns(3)
-        c1.metric("Slope", "0.974")
-        c2.metric("Intercept", "610,409")
-        c3.metric("R² Score", "0.977")
+        with c1:
+            with st.container(border=True, horizontal_alignment="center"):
+                st.caption("Slope")
+                st.header("0.974")
+                #c1.metric("Slope", "0.974")
+        with c2:
+            with st.container(border=True, horizontal_alignment="center"):
+                st.caption("Intercept")
+                st.header("610,409")
+                #c2.metric("Intercept", "610,409")
+        with c3:
+            with st.container(border=True, horizontal_alignment="center"):
+                st.caption("R² Score")
+                st.header("0.977")
+                #c3.metric("R² Score", "0.977")
 
         st.markdown("""
-### Interpretation
-There is a near-perfect linear relationship between the Approved Budget and Contract Cost.  
-Higher budgets result in proportionally higher costs, showing strong consistency in expenditure behavior.
+        <div class='glass-container'>
+    ### Interpretation
+    There is a near-perfect linear relationship between the Approved Budget and Contract Cost.  
+    Higher budgets result in proportionally higher costs, showing strong consistency in expenditure behavior.
 
-### Key Notes
-- Points align tightly with the regression line.  
-- Very few projects deviate from the budget.  
-- The high R² shows the model captures most cost variability.  
+    ### Key Notes
+    - Points align tightly with the regression line.  
+    - Very few projects deviate from the budget.  
+    - The high R² shows the model captures most cost variability.  
 
-### Conclusion
-Budget is the **strongest and most reliable predictor** of Contract Cost.  
-""")
+    ### Conclusion
+    Budget is the **strongest and most reliable predictor** of Contract Cost.  
+        </div>
+    """,unsafe_allow_html=True)
 
     # ==========================================================
     # TAB 2 — REGRESSION 2
@@ -226,23 +241,38 @@ Budget is the **strongest and most reliable predictor** of Contract Cost.
         st.image("res/Regression 2.png", use_container_width=True)
 
         c1, c2, c3 = st.columns(3)
-        c1.metric("Slope", "86,178")
-        c2.metric("Intercept", "34,268,617")
-        c3.metric("R² Score", "0.086")
+        with c1:
+            with st.container(border=True, horizontal_alignment="center"):
+                st.caption("Slope")
+                st.header("86,178")
+            # c1.metric("Slope", "86,178")
+        with c2:
+            with st.container(border=True, horizontal_alignment="center"):
+                st.caption("Intercept")
+                st.header("34,268,617")
+                #c2.metric("Intercept", "34,268,617")
+        with c3:
+            with st.container(border=True, horizontal_alignment="center"):
+                st.caption("R² Score")
+                st.header("0.086")
+
+                #c3.metric("R² Score", "0.086")
 
         st.markdown("""
-### Interpretation
-Project Duration shows **very weak predictive power** for Contract Cost.  
-Costs vary widely even for similar durations, indicating time is not the main driver of expenditure.
+        <div class='glass-card'>
+    ### Interpretation
+    Project Duration shows **very weak predictive power** for Contract Cost.  
+    Costs vary widely even for similar durations, indicating time is not the main driver of expenditure.
 
-### Key Notes
-- Scatter is highly dispersed.  
-- Duration explains only 8.6% of cost variation.  
-- Long durations do **not** reliably mean higher costs.
+    ### Key Notes
+    - Scatter is highly dispersed.  
+    - Duration explains only 8.6% of cost variation.  
+    - Long durations do **not** reliably mean higher costs.
 
-### Conclusion
-Duration alone cannot explain or estimate Contract Costs effectively.
-""")
+    ### Conclusion
+    Duration alone cannot explain or estimate Contract Costs effectively.
+        </div>
+    """,unsafe_allow_html=True)
 
     # ==========================================================
     # TAB 3 — REGRESSION 3
@@ -252,23 +282,37 @@ Duration alone cannot explain or estimate Contract Costs effectively.
         st.image("res/Regression 3.png", use_container_width=True)
 
         c1, c2, c3 = st.columns(3)
-        c1.metric("Slope", "1.001 × 10⁻⁶")
-        c2.metric("Intercept", "190.02 days")
-        c3.metric("R² Score", "0.089")
+        with c1:
+            with st.container(border=True, horizontal_alignment="center"):
+                st.caption("Slope")
+                st.header("1.001 × 10⁻⁶")
+                #c1.metric("Slope", "1.001 × 10⁻⁶")
+        with c2:
+            with st.container(border=True, horizontal_alignment="center"):
+                st.caption("Intercept")
+                st.header("190.02 days")
+                #c2.metric("Intercept", "190.02 days")
+        with c3:
+            with st.container(border=True, horizontal_alignment="center"):
+                st.caption("R² Score")
+                st.header("0.089")
+                #c3.metric("R² Score", "0.089")
 
         st.markdown("""
-### Interpretation
-Approved Budget has **almost no influence** on Project Duration.  
-Timelines vary drastically across all budget levels.
+        <div class='glass-card'>
+    ### Interpretation
+    Approved Budget has **almost no influence** on Project Duration.  
+    Timelines vary drastically across all budget levels.
 
-### Key Notes
-- Scatter is extremely spread out.  
-- Only 8.9% of timeline variability is explained by budget.  
-- High-budget projects are not consistently faster or slower.
+    ### Key Notes
+    - Scatter is extremely spread out.  
+    - Only 8.9% of timeline variability is explained by budget.  
+    - High-budget projects are not consistently faster or slower.
 
-### Conclusion
-Budget is **not** a predictor of how long a project will take.
-""")
+    ### Conclusion
+    Budget is **not** a predictor of how long a project will take.
+        </div>
+    """,unsafe_allow_html=True)
 
     # ==========================================================
     # TAB 4 — OVERALL SUMMARY
@@ -276,26 +320,30 @@ Budget is **not** a predictor of how long a project will take.
     with tab_summary:
         st.header("Overall Summary")
         st.markdown("""
-### Synthesis of Findings
-Across the three regressions, one pattern is crystal clear:
+        
+        <div class='glass-card'>
+    ### Synthesis of Findings
+    Across the three regressions, one pattern is crystal clear:
 
-**Contract Cost is tightly tied to the Approved Budget, while Project Duration is largely independent of both.**
+    **Contract Cost is tightly tied to the Approved Budget, while Project Duration is largely independent of both.**
 
----
+    ---
 
-### Comparison Table
+    ### Comparison Table
 
-| Regression | R² Score | Interpretation |
-|-----------|----------|----------------|
-| **Budget → Cost** | **0.977** | Extremely strong relationship; budget predicts cost almost perfectly. |
-| **Duration → Cost** | 0.086 | Very weak; time spent does not dictate cost. |
-| **Budget → Duration** | 0.089 | Very weak; budget does not determine timeline. |
+    | Regression | R² Score | Interpretation |
+    |-----------|----------|----------------|
+    | **Budget → Cost** | **0.977** | Extremely strong relationship; budget predicts cost almost perfectly. |
+    | **Duration → Cost** | 0.086 | Very weak; time spent does not dictate cost. |
+    | **Budget → Duration** | 0.089 | Very weak; budget does not determine timeline. |
 
----
+    ---
 
-### Final Interpretation
-- Costs follow budgets **very closely**.  
-- Timelines are unpredictable and affected by factors outside these variables.  
-- The contrast between strong financial correlation and weak time-based correlations highlights the need to **scrutinize efficiency, delays, and project execution practices**.
-""")
+    ### Final Interpretation
+    - Costs follow budgets **very closely**.  
+    - Timelines are unpredictable and affected by factors outside these variables.  
+    - The contrast between strong financial correlation and weak time-based correlations highlights the need to **scrutinize efficiency, delays, and project execution practices**.
+    
+    </div>
+    """,unsafe_allow_html=True)
 
