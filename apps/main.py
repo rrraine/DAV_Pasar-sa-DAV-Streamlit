@@ -18,7 +18,8 @@ st.set_page_config(
     layout="wide",
 )
 
-st.title("DPWH Flood Control Projects - Data Analysis Dashbaord")
+
+st.title("DPWH Flood Control Projects - Data Analysis Dashboard")
 
 def load_dataset():
     df = pd.read_csv("data/dpwhfloodcontrol.csv")
@@ -38,128 +39,68 @@ def load_dataset():
 
 # Dataset | to reuse in all tabs
 
-# st.sidebar.header("Upload Your Dataset")
-# uploaded_file = st.sidebar.file_uploader("Upload CSV file", type=["csv"])
+#st.sidebar.header("Upload Your Dataset")
+#uploaded_file = st.sidebar.file_uploader("Upload CSV file", type=["csv"])
 
-# if uploaded_file:
-#     df = pd.read_csv(uploaded_file)
+#if uploaded_file:
+#    df = pd.read_csv(uploaded_file)
 # else:
-#     df = None
-#   st.sidebar.warning("Please upload a CSV file to continue.")
+#    df = None
+#    st.sidebar.warning("Please upload a CSV file to continue.")
 
 st.markdown("""
     <style>
+
+    /* --------------------------------------------------
+                    TAB NAVIGATION (CENTERING FIX)
+    -------------------------------------------------- */
+    
+    /* FIX: Target the internal tab button list and center its contents */
+    .stTabs [data-baseweb="tab-list"] {
+        justify-content: center !important;
+        gap: 5px; 
+    }
+    
+    /* Ensure the main tabs container is a block element and doesn't interfere with the width of content below it */
+    [data-testid="stTabs"] {
+        display: block !important; 
+        margin-bottom: 20px;
+        width: 100%; /* Ensure it spans the full width of the main page */
+    }
+
+
     /* Default tab style */
     .stTabs [data-baseweb="tab"] {
         font-size: 17px;
-        color: #003366;                     /* Inactive tab text color */
+        color: #003366;                     /* Inactive tab text color (Blue) */
         background-color: #f0f0f0;          /* Inactive tab background */
         border-radius: 8px 8px 0 0;
         padding: 12px 20px;
         margin-right: 5px;
+        transition: all 0.25s ease;
     }
 
     /* Active tab style */
     .stTabs [aria-selected="true"] {
-        background-color: #003366 !important;  /* Active background */
-        color: white !important;               /* Active text */
+        background-color: #003366 !important;  /* Active background (Blue) */
+        color: white !important;               /* Active text (White) */
         font-weight: bold;
-        border-bottom: 2px solid #001f4d;
+        border-bottom: 2px solid #0A6E44; /* Green underline */
     }
     </style>
 """, unsafe_allow_html=True)
 
 
-tab1, tab2, tab3, tab4 = st.tabs(["   Overview   ", "   Data Exploration   ", "   Analysis   ", "   Insights   "])
+tab1, tab2, tab3, tab4 = st.tabs(["Overview", "Data Exploration", "Analysis", "Insights"])
+with st.container(horizontal_alignment="center"):
+    with st.container():
+        with tab1:
+            tab_overview.render()
+        with tab2:
+            tab_dataexploration.render()
 
-with tab1:
-    tab_overview.render()
+        with tab3:
+            tab_analysis.render()
 
-with tab2:
-    tab_dataexploration.render()
-
-with tab3:
-    tab_analysis.render()
-
-with tab4:
-    tab_insights.render()
-
-
-# Option 2: Using a selectbox in the sidebar
-
-# Page config
-# st.set_page_config(
-#     page_title="DPWH Flood Control Streamlit App",
-#     layout="wide"
-# )
-
-# st.title("DPWH Flood Control Projects - Data Analysis Dashboard")
-
-# st.markdown("""
-# <style>
-# /* Make radio look like vertical buttons */
-# div[role="radiogroup"] > label {
-#     background: #f0f0f0;
-#     padding: 12px 16px;
-#     border-radius: 8px;
-#     margin-bottom: 6px;
-#     width: 100%;
-#     display: block;
-#     border: 1px solid #d0d0d0;
-#     cursor: pointer;
-#     color: #003366;
-#     font-size: 16px;
-# }
-
-# /* Selected state */
-# div[role="radiogroup"] > label[data-baseweb="radio"] > div:first-child {
-#     background: #003366 !important;
-#     color: white !important;
-#     font-weight: bold;
-# }
-# </style>
-# """, unsafe_allow_html=True)
-
-
-# # ---------------------------------------
-# # Sidebar-like vertical tabs using radio
-# # ---------------------------------------
-
-# # Define available views
-# pages = {
-#     "Overview and Dataset": "overview",
-#     "Data Exploration": "exploration",
-#     "Analysis": "analysis",
-#     "Insights": "insights"
-# }
-
-# # ---- Layout: 2 columns (sidebar + content)
-# col_sidebar, col_content = st.columns([1, 4])
-
-# with col_sidebar:
-#     st.markdown("### 📁 Sections")
-
-#     # Radio button selection (vertical tabs)
-#     selected_page = st.radio(
-#         "",
-#         list(pages.keys()),
-#         label_visibility="collapsed",
-#     )
-
-# # ---------------------------------------
-# # CONTENT AREA (right column)
-# # ---------------------------------------
-# with col_content:
-#     if selected_page == "Overview and Dataset":
-#         tab_overview.render()
-
-#     elif selected_page == "Data Exploration":
-#         tab_dataexploration.render()
-
-#     elif selected_page == "Analysis":
-#         tab_analysis.render()
-
-#     elif selected_page == "Insights":
-#         tab_insights.render()
-
-
+        with tab4:
+            tab_insights.render()

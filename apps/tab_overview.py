@@ -2,36 +2,37 @@
 import streamlit as st
 import pandas as pd
 from utils import load_dataset
+from style_manager import inject_global_css
 
 def display_title_and_overview():
     # st.title("Overview and Dataset")
-    st.subheader("Overview")
+    st.markdown("<h2>Overview</h2>",unsafe_allow_html=True)
 
-    st.write("""
-        Flooding remains one of the most persistent challenges in the Philippines, severely affecting communities, infrastructure, and local economies. The issue has recently gained national attention due to controversies surrounding the country’s flood control budget—specifically cases of corruption, misuse of funds, and substandard project implementations. These concerns became more relevant after several typhoons devastated different regions, with Bagyong Tino in Cebu serving as a notable example. Understanding how flood control projects are distributed, implemented, and funded is crucial for evaluating whether government resources are being allocated efficiently and effectively.
+    st.markdown("""
+        <div class="glass-card">Flooding remains one of the most persistent challenges in the Philippines, severely affecting communities, infrastructure, and local economies. The issue has recently gained national attention due to controversies surrounding the country’s flood control budget—specifically cases of corruption, misuse of funds, and substandard project implementations. These concerns became more relevant after several typhoons devastated different regions, with Bagyong Tino in Cebu serving as a notable example. Understanding how flood control projects are distributed, implemented, and funded is crucial for evaluating whether government resources are being allocated efficiently and effectively.</div>
 
-    """)
+    """,unsafe_allow_html=True)
 
 # def display_gallery():
 #     st.subheader("Typhone Aftermath - Photogallery")
     # add images with captions
 
 
-def load_dataset():
-    st.subheader("Dataset")
-    
-    file_path = "data/dpwhfloodcontrol.csv"
-    df = pd.read_csv(file_path)
-    return df
-
-    # try:
-    #     df = pd.read_csv(file_path)
-    #     st.success("Dataset loaded successfully!")
-    #     st.dataframe(df.head(), use_container_width=True)
-    #     return df
-    # except FileNotFoundError:
-    #     st.error(f"File not found: {file_path}. Please ensure the dataset is in the correct path.")
-    #     return None
+# def load_dataset():
+#     st.subheader("Dataset")
+#
+#     file_path = "data/dpwhfloodcontrol.csv"
+#     df = pd.read_csv(file_path)
+#     return df
+#
+#     # try:
+#     #     df = pd.read_csv(file_path)
+#     #     st.success("Dataset loaded successfully!")
+#     #     st.dataframe(df.head(), use_container_width=True)
+#     #     return df
+#     # except FileNotFoundError:
+#     #     st.error(f"File not found: {file_path}. Please ensure the dataset is in the correct path.")
+#     #     return None
     
 def display_dataset_info(df):
     # st.subheader("Dataset Information")
@@ -64,51 +65,59 @@ def display_filters(df):
     numeric_cols = df_clean.select_dtypes(include=['float64', 'int64']).columns.tolist()
     cat_cols = df_clean.select_dtypes(include=['object']).columns.tolist()
 
-    selected_col = st.selectbox("Select column to filter:", df_clean.columns)
+    col_data, col_option = st.columns([3, 1])
+    with col_option:
+        st.markdown("""<div class='filter-reset-container'>""",unsafe_allow_html=True)
 
-    if selected_col in numeric_cols:
-        min_val = float(df_clean[selected_col].min())
-        max_val = float(df_clean[selected_col].max())
+        selected_col = st.selectbox("Select column to filter:", df_clean.columns)
 
-        filter_range = st.slider(
-            f"Filter `{selected_col}` by range:",
-            min_val, max_val, (min_val, max_val)
-        )
+        if selected_col in numeric_cols:
+            min_val = float(df_clean[selected_col].min())
+            max_val = float(df_clean[selected_col].max())
 
-        df_filtered = df_clean[(df_clean[selected_col] >= filter_range[0]) &
-                               (df_clean[selected_col] <= filter_range[1])]
+            filter_range = st.slider(
+                f"Filter `{selected_col}` by range:",
+                min_val, max_val, (min_val, max_val)
+            )
 
-    elif selected_col in cat_cols:
-        unique_vals = df_clean[selected_col].dropna().unique().tolist()
-        selected_vals = st.multiselect(
-            f"Select values for `{selected_col}`:",
-            unique_vals
-        )
+            df_filtered = df_clean[(df_clean[selected_col] >= filter_range[0]) &
+                                   (df_clean[selected_col] <= filter_range[1])]
 
-        df_filtered = df_clean[df_clean[selected_col].isin(selected_vals)] if selected_vals else df_clean
+        elif selected_col in cat_cols:
+            unique_vals = df_clean[selected_col].dropna().unique().tolist()
+            selected_vals = st.multiselect(
+                f"Select values for `{selected_col}`:",
+                unique_vals
+            )
 
-    else:
-        st.info("Column type not supported for filtering.")
-        df_filtered = df_clean
+            df_filtered = df_clean[df_clean[selected_col].isin(selected_vals)] if selected_vals else df_clean
 
-    st.dataframe(df_filtered, use_container_width=True)
+        else:
+            st.info("Column type not supported for filtering.")
+            df_filtered = df_clean
+        st.markdown("</div>",unsafe_allow_html=True)
+    with col_data:
+        st.dataframe(df_filtered, use_container_width=True)
 
 
 def chosen_techniques():
     st.subheader("Chosen Data Analysis Techniques")
 
-    st.write("""
+    st.markdown("""
+        <div class="glass-card">
     The analysis employs several techniques to extract meaningful insights from the DPWH Flood Control Projects dataset:
 
     - **Descriptive Analysis:** Used to summarize the dataset and provide an overview of trends, such as the number of projects per region and average budgets, giving a clear picture of overall patterns.  
     - **Correlation Analysis:** Applied to explore relationships between numerical variables, like budget versus contract cost, helping to detect anomalies or inefficiencies in spending.  
     - **Linear Regression:** Utilized to estimate how one variable affects another, such as predicting contract cost based on budget, which can highlight potential overspending or delays.  
     - **Clustering:** Selected to group similar projects or regions based on key attributes, revealing hidden patterns such as contractor performance clusters or regions with comparable flood control needs.
-    """)
+        </div>
+    """,unsafe_allow_html=True)
 
 def objective():
      st.subheader("Objective of the Analysis")
-     st.write("""
+     st.markdown("""
+        <div class="glass-card">
         The main objective of this analysis is to explore and visualize key insights from the DPWH Flood Control Projects dataset, particularly identifying the top contractors based on the number of projects—both overall and per region—and uncovering patterns in project implementation and resource distribution nationwide.
 
         **Expanded Objectives:**
@@ -118,7 +127,8 @@ def objective():
         - Examine project completion timelines to find regions or contractors with delays.
         - Group regions or projects using clustering to uncover hidden patterns related to contractor performance or regional flood control needs.
         - Provide data-driven insights to improve transparency, efficiency, and planning for future flood control initiatives.
-        """)
+        </div>    
+        """,unsafe_allow_html=True)
 
 
 # # footer, no design pa
@@ -151,6 +161,7 @@ def display_group_members():
 # call functions to render the tab
 def render():
     display_title_and_overview()
+    inject_global_css()
     # display_gallery()
 
     df = load_dataset()
