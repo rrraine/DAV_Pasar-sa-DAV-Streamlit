@@ -1,6 +1,4 @@
 import streamlit as st
-from pathlib import Path
-import pandas as pd
 import plotly.express as px
 from utils import load_dataset
 
@@ -106,7 +104,7 @@ def key_insights(df):
             )
     st.divider()
     # Should I Add A Concentration of Contracts???
-    st.subheader("Concentration of Contracts // Should I add this?")
+    st.subheader("Concentration of Contracts")
 
 def pattern_trends(df):
     if df.empty:
@@ -139,14 +137,29 @@ def pattern_trends(df):
                 - **Surge Years (2022-2024):** The budget surge was overwhelmingly driven by **Region III (Central Luzon)** and **Region IV-A (CALABARZON)**.
                 - **Insight:** This trend indicates a focused, massive effort to enhance infrastructure in these key Luzon economic and population centers, potentially at the expense of consistent investment in other regions.
             """)
-    st.divider()
 
+
+def anomalies(df):
+    if df.empty:
+        st.warning("No data found")
+        return
+    st.header("Anomalies")
     st.subheader("Tight Budget Cost Alignment")
 
-    col_text, col_chart = st.columns([2,1])
+    col_text, col_chart = st.columns([1, 2])
     with col_text:
         with st.container(border=True, horizontal_alignment="center"):
-            st.text("What is happening na ahahahhaha")
+            st.markdown("""
+                Comparison of Approved Budget vs Contract Cost
+
+                The scatter diagram for Approved Budget and Contract Cost reveals a near-perfect linear relationsship
+                ,confirming the the DPWH is successful at **cost control** and reliably stays within the budget. 
+                - The high correlation (typically **R = 0.95**) confirms that the planned budget is an excellent predictor
+                    of the final cost.
+                - However, this tight alignment suggest a structural issue: **Weak Competition**. Since contractors rarely
+                    bid significantly below the maximum approved budget, the process consistently minimizes risk for the agency but
+                    **fails to maximize public savings** through competitive price reduction.
+            """)
     with col_chart:
         with st.container(border=True, horizontal_alignment="center"):
             fig_cost_align = px.scatter(
@@ -159,7 +172,41 @@ def pattern_trends(df):
                 template="plotly_dark"
             )
             st.plotly_chart(fig_cost_align, use_container_width=True)
+    st.divider()
+    st.subheader("Financial Disconnect: The Oversight Paradox")
 
+    col_plot, col_text = st.columns([2, 1])
+    with col_plot:
+        with st.container(border=True, horizontal_alignment="center"):
+            fig_scatter = px.scatter(
+                df[df['ContractCost'] < df['ContractCost'].quantile(0.95)],
+                y='ContractCost',
+                x='DurationDays',
+                log_y=True,
+                title="Cost vs Duration: Weak Correlation (r = 0.22)",
+                labels={
+                    'DurationDays': 'Project Duration(Days)',
+                    'ContractCost': 'Contract Cost (Log Scale)',
+                }
+            )
+            fig_scatter.update_layout(template="plotly_dark", height=450)
+            st.plotly_chart(fig_scatter, use_container_width=True)
+    with col_text:
+        with st.container(border=True, horizontal_alignment="center"):
+            st.markdown("""
+                The data reveals a significant financial disconnect where project duration
+                is a very poor predictor of contract cost (r = 0.22)
+                
+                This suggest that project cost are primarily driven by factors other than time, such as:
+                - **Initial Scope and Complexity**
+                - **Risk Premium**
+                - **Resource Intensity**
+            """)
+    st.divider()
+
+
+def recommendation(df):
+    st.subheader("Recommendations to the DPWH")
 
 def render():
     st.title("Insights")
@@ -167,3 +214,4 @@ def render():
     df = load_dataset()
     key_insights(df)
     pattern_trends(df)
+    anomalies(df)

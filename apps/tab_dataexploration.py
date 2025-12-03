@@ -176,9 +176,11 @@ def heatmap_boxplot_histogram(df):
 
     col1, col2 = st.columns(2)
     with col1:
-        st.write("""
+        st.markdown("""
+                <div class="glass-card">
                 The heatmap shows correlations between key numeric variables, such as Approved Budget, Contract Cost, and Duration. Surprisingly, Approved Budget and Contract Cost are almost uncorrelated (r ≈ –0.01), suggesting inconsistencies due to rebudgeting, reporting differences, or project management gaps. Project cost and duration are also weakly related (r ≈ 0.03), and smaller projects tend to have slightly higher cost overruns (r ≈ –0.20). Overall, the heatmap reveals weak relationships among major variables, highlighting potential gaps in how budgets, timelines, and costs are managed across projects and regions.
-                """)
+                </div>
+                """,unsafe_allow_html=True)
     with col2:
         st.image("res/heatmap.png", use_container_width=True)
 
@@ -187,14 +189,15 @@ def heatmap_boxplot_histogram(df):
     col1, col2 = st.columns(2)
 
     with col1:
-        st.write("#### Boxplot")
-        st.write("""
-                The box plot visualizes the spread and outliers in project budgets and costs. Most projects cluster between ₱25M and ₱85M, but there are several outliers representing unusually high or low project costs. These outliers may reflect large-scale national or regional projects or potential inefficiencies in budgeting. This confirms the pattern seen in the histogram: the majority of projects follow typical funding ranges, while a few disproportionately expensive ones have a significant impact on overall spending.
-                """)
-        st.image("res/boxplot.png", use_container_width=True)
+        with st.container():
+            st.subheader("Boxplot")
+            st.write("""
+                    The box plot visualizes the spread and outliers in project budgets and costs. Most projects cluster between ₱25M and ₱85M, but there are several outliers representing unusually high or low project costs. These outliers may reflect large-scale national or regional projects or potential inefficiencies in budgeting. This confirms the pattern seen in the histogram: the majority of projects follow typical funding ranges, while a few disproportionately expensive ones have a significant impact on overall spending.
+                    """)
+            st.image("res/boxplot.png", use_container_width=True)
 
     with col2:
-        st.write("#### Histogram")
+        st.subheader("Histogram")
         
         st.write("""
             The histogram shows the distribution of Approved Budgets and Contract Costs for flood control projects. Both are right-skewed, meaning most projects fall within lower-to-mid budget ranges, while a few very expensive “mega-projects” pull the average upward. 
