@@ -39,14 +39,14 @@ def load_dataset():
 
 # Dataset | to reuse in all tabs
 
-# st.sidebar.header("Upload Your Dataset")
-# uploaded_file = st.sidebar.file_uploader("Upload CSV file", type=["csv"])
+#st.sidebar.header("Upload Your Dataset")
+#uploaded_file = st.sidebar.file_uploader("Upload CSV file", type=["csv"])
 
-# if uploaded_file:
-#     df = pd.read_csv(uploaded_file)
+#if uploaded_file:
+#    df = pd.read_csv(uploaded_file)
 # else:
-#     df = None
-#   st.sidebar.warning("Please upload a CSV file to continue.")
+#    df = None
+#    st.sidebar.warning("Please upload a CSV file to continue.")
 
 st.markdown("""
     <style>
