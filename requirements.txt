@@ -3,5 +3,6 @@ streamlit-drawable-canvas==0.9.3
 numpy
 sckit-learn
 matplotlib
+plotly
 pandas
 Pillow
