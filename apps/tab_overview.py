@@ -35,20 +35,28 @@ def display_title_and_overview():
 #     #     return None
     
 def display_dataset_info(df):
-    # st.subheader("Dataset Information")
-    
-    df_clean = df.loc[:, ~df.columns.str.startswith("Unnamed")]  # Remove unnamed columns
+    # Remove unnamed columns
+    df_clean = df.loc[:, ~df.columns.str.startswith("Unnamed")]
 
-    st.write(f"**Rows:** {df_clean.shape[0]} | **Columns:** {df_clean.shape[1]}")
+    for col in ["Budget", "ContractCost"]:
+        if col in df_clean.columns:
+            # Strip whitespace and replace weird placeholders
+            df_clean[col] = df_clean[col].apply(lambda x: str(x).strip() if pd.notnull(x) else "0")
+            df_clean[col].replace({"": "0", " ": "0", "  ": "0", "—": "0", "-": "0", "N/A": "0", "NA": "0", "None": "0", "null": "0"}, inplace=True)
+            # Convert to numeric and fill any remaining NaN with 0
+            df_clean[col] = pd.to_numeric(df_clean[col], errors="coerce").fillna(0)
+
+    st.write(f"*Rows:* {df_clean.shape[0]} | *Columns:* {df_clean.shape[1]}")
 
     with st.expander("Show Detailed Dataset Information", expanded=False):
-        st.write("### 📌 Data Summary")
+        st.write("### Data Summary")
         st.write(df_clean.describe(include="all"))
 
-        st.write("### 🔢 Numeric Summary")
+        st.write("### Numeric Summary")
         st.write(df_clean.describe())
 
-        st.write("### ❗ Missing Values")
+        st.write("### Missing Values")
+
         st.write(df_clean.isnull().sum())
 
     st.divider()
