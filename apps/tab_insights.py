@@ -349,29 +349,32 @@ def recommendation(df):
     col_problem, col_proof, col_action = st.columns([1, 1, 1.5])
 
     with col_problem:
-        st.error("Problem: Weak Bidding Alignment")
-        st.markdown(
-            """
-            Contractors consistently bid amounts extremely close to the maximum Approved Budget (ABC).
-            """
-        )
+        with st.container(border=True):
+            st.error("Problem: Weak Bidding Alignment")
+            st.markdown(
+                """
+                Contractors consistently bid amounts extremely close to the maximum Approved Budget (ABC).
+                """
+            )
 
     with col_proof:
-        st.info("Proof: Linear Regression (R² ≈ 0.98)")
-        st.markdown(
-            """
-            The near-perfect predictive power of Budget → Contract Cost suggests a lack of competitive pressure to drive prices down.
-            """
-        )
+        with st.container(border=True):
+            st.info("Proof: Linear Regression (R² ≈ 0.98)")
+            st.markdown(
+                """
+                The near-perfect predictive power of Budget → Contract Cost suggests a lack of competitive pressure to drive prices down.
+                """
+            )
 
     with col_action:
-        st.success("Action: Dynamic Bidding Audit")
-        st.markdown(
-            """
-            - **Mandate Price Deviation:** Flag and audit all contract bids that fall within a narrow percentage (e.g., 2%) of the ABC.
-            - **Diversify Bidders:** Actively seek bids outside the current top four firms to foster a more competitive market.
-            """
-        )
+        with st.container(border=True):
+            st.success("Action: Dynamic Bidding Audit")
+            st.markdown(
+                """
+                - **Mandate Price Deviation:** Flag and audit all contract bids that fall within a narrow percentage (e.g., 2%) of the ABC.
+                - **Diversify Bidders:** Actively seek bids outside the current top four firms to foster a more competitive market.
+                """
+            )
     st.markdown("</div>", unsafe_allow_html=True)
 
     st.subheader("R2: Audit Project Workload and Concurrency")
@@ -379,29 +382,32 @@ def recommendation(df):
     col_problem, col_proof, col_action = st.columns([1, 1, 1.5])
 
     with col_problem:
-        st.error("Problem: Contract Splitting Risk")
-        st.markdown(
-            """
-            Visual evidence shows patterns of **identical/near-identical projects** awarded to the same contractor with overlapping timelines.
-            """
-        )
+        with st.container(border=True):
+            st.error("Problem: Contract Splitting Risk")
+            st.markdown(
+                """
+                Visual evidence shows patterns of **identical/near-identical projects** awarded to the same contractor with overlapping timelines.
+                """
+            )
 
     with col_proof:
-        st.info("Proof: Timeline Anomaly")
-        st.markdown(
-            """
-            This suggests bypassing higher approval thresholds and raises serious concerns about contractor capacity and potential **workload saturation**.
-            """
-        )
+        with st.container(border=True):
+            st.info("Proof: Timeline Anomal y")
+            st.markdown(
+                """
+                This suggests bypassing higher approval thresholds and raises serious concerns about contractor capacity and potential **workload saturation**.
+                """
+            )
 
     with col_action:
-        st.success("Action: Automated Capacity Monitoring")
-        st.markdown(
-            """
-            - **Automated Flagging:** Implement a system to flag contracts awarded to the same firm in the same region within a 90-day window with similar descriptions.
-            - **Capacity Limit:** Establish a **Maximum Concurrent Project Load** per contractor to prevent quality decline.
-            """
-        )
+        with st.container(border=True):
+            st.success("Action: Automated Capacity Monitoring")
+            st.markdown(
+                """
+                - **Automated Flagging:** Implement a system to flag contracts awarded to the same firm in the same region within a 90-day window with similar descriptions.
+                - **Capacity Limit:** Establish a **Maximum Concurrent Project Load** per contractor to prevent quality decline.
+                """
+            )
 
     st.markdown("</div>", unsafe_allow_html=True)
 
@@ -443,20 +449,23 @@ def analysis_clustering():
     with col_cost:
         st.info("📊 **Cost-Performance Combinations**")
         st.markdown("""
+            <div class='glass-card'>'
            The combination of **Budget + PercentSavings** is vital for analyzing *budgeting efficiency*.
 
            - **Cluster Example:** A cluster showing **High ContractCost but Negative Savings** (budget overruns) represents an immediate **Red Flag** that requires an external audit.
            - **Value:** This isolates groups where the procurement process failed to accurately predict or control final cost.
-           """)
+           </div>
+           """,unsafe_allow_html=True)
 
     with col_duration:
-        st.info("⏰ **Time-Cost-Performance Combinations**")
-        st.markdown("""
-           The combination of **Budget + PercentSavings + DurationDays** identifies overall efficiency relative to time and money.
-
-           - **Cluster Example:** A cluster showing **Slow Duration + Low/Negative Savings** indicates **poor performers** (sluggish and inefficient).
-           - **Value:** This helps the DPWH identify contractors or regional offices that consistently struggle with complex projects.
-           """)
+        with st.container(border=True):
+            st.info("⏰ **Time-Cost-Performance Combinations**")
+            st.markdown("""
+               The combination of **Budget + PercentSavings + DurationDays** identifies overall efficiency relative to time and money.
+    
+               - **Cluster Example:** A cluster showing **Slow Duration + Low/Negative Savings** indicates **poor performers** (sluggish and inefficient).
+               - **Value:** This helps the DPWH identify contractors or regional offices that consistently struggle with complex projects.
+               """)
 
     st.markdown("---")
     #endregion
@@ -469,20 +478,23 @@ def analysis_clustering():
     col_pc1, col_pc2 = st.columns(2)
 
     with col_pc1:
-        st.markdown(f"""
-           **PC1 (Principal Component 1): Project Scale**
-           - PC1 captures the **largest amount of variation**, which is typically dominated by **Budget** and **ContractCost**.
-           - **High PC1 Value:** Represents mega-projects with high cost and long duration.
-           - **Low PC1 Value:** Represents small projects with low cost and short duration.
-           """)
+        with st.container(border=True):
+            st.markdown(f"""
+               **PC1 (Principal Component 1): Project Scale**
+               - PC1 captures the **largest amount of variation**, which is typically dominated by **Budget** and **ContractCost**.
+               - **High PC1 Value:** Represents mega-projects with high cost and long duration.
+               - **Low PC1 Value:** Represents small projects with low cost and short duration.
+               """)
 
     with col_pc2:
         st.markdown(f"""
+           <div class="glass-card">
            **PC2 (Principal Component 2): Time-Performance Deviation**
            - PC2 captures the **second largest pattern**, often independent of pure cost.
            - In this dataset, PC2 is likely dominated by **PercentSavings** and **DurationDays**.
            - **High PC2 Value:** Represents projects with unusual financial behavior relative to their size (e.g., extremely high savings or large negative overruns).
-           """)
+           </div>
+           """,unsafe_allow_html=True)
 
 def limitations():
     st.divider()
@@ -495,25 +507,27 @@ def limitations():
 
     # --- Limitation 1: Missing Quality Data (The most critical omission) ---
     with col_a:
-        st.error("L1: Absence of Project Quality/Effectiveness Data")
-        st.markdown(
-            """
-            The most significant limitation is the **lack of any metric for performance or project quality** (e.g., flood reduction efficiency, infrastructure durability, community feedback).
-
-            - **Impact:** We cannot determine if a high-cost project was actually successful or if a low-cost project was substandard. Our analysis is confined to **financial and time efficiency** (cost/duration), not final public benefit.
-            """
-        )
+        with st.container(border=True):
+            st.error("L1: Absence of Project Quality/Effectiveness Data")
+            st.markdown(
+                """
+                  The most significant limitation is the **lack of any metric for performance or project quality** (e.g., flood reduction efficiency, infrastructure durability, community feedback).
+    
+                - **Impact:** We cannot determine if a high-cost project was actually successful or if a low-cost project was substandard. Our analysis is confined to **financial and time efficiency** (cost/duration), not final public benefit.
+                """
+                )
 
     # --- Limitation 2: Correlation vs. Causation & Scope ---
     with col_b:
-        st.error("L2: Correlation Does Not Imply Causation (Audit Scope)")
-        st.markdown(
-            """
-            Our findings (e.g., weak competition, clustering anomalies) show strong *patterns* and *associations* but do not prove corruption or intentional wrongdoing.
-
-            - **Impact:** Our work identifies **risk areas for audit**, but only a formal, external investigation can establish the "why" and determine actual causality (e.g., if contract splitting was intentional).
-            """
-        )
+        with st.container(border=True):
+            st.error("L2: Correlation Does Not Imply Causation (Audit Scope)")
+            st.markdown(
+                """
+                Our findings (e.g., weak competition, clustering anomalies) show strong *patterns* and *associations* but do not prove corruption or intentional wrongdoing.
+    
+                - **Impact:** Our work identifies **risk areas for audit**, but only a formal, external investigation can establish the "why" and determine actual causality (e.g., if contract splitting was intentional).
+                """
+            )
 
     st.markdown("---")
 
@@ -525,22 +539,26 @@ def limitations():
         st.warning("L3: Date and Timeline Granularity")
         st.markdown(
             """
+            <div class='glass-card'>
             The `DurationDays` metric relies solely on reported `StartDate` and `ActualCompletionDate`.
 
             - **Impact:** This timeframe does not account for real-world factors like weather delays (typhoons), necessary permits, or legal disputes, which can artificially inflate the duration, potentially skewing our efficiency metrics.
+            </div>
             """
-        )
+        ,unsafe_allow_html=True)
 
     # --- Limitation 4: Cost Standardization ---
     with col_d:
         st.warning("L4: Lack of Cost Standardization Context")
         st.markdown(
             """
+            <div class='glass-card'>
             We cannot verify if the massive cost variability (outliers) is due to external factors like regional price differences (e.g., higher labor cost in Metro Manila vs. rural areas) or true procurement failure.
 
             - **Impact:** The absence of a standard regional price index makes it challenging to definitively label all financial outliers as 'inefficient'.
+            </div>
             """
-        )
+        ,unsafe_allow_html=True)
 
 def value_technique():
     st.divider()
@@ -587,31 +605,36 @@ def value_technique():
         homogeneity = ANALYSIS_RESULTS['Homogeneity_Score']
 
         st.markdown(f"""
+        <div class='glass-card'>
         The clustering (Homogeneity Score: {homogeneity:.2f}) provides a data-driven basis for **risk segmentation**.
 
-        - **Decision Tool:** Instead of auditing all projects equally, the DPWH can dedicate resources based on the cluster profiles: the **Risk/Inefficiency Cluster (e.g., Cluster 3)**—characterized by high variance and low savings—becomes the primary target for specialized audit teams.
+        - **Decision Tool:** Instead of auditing all projects equally, the DPWH can dedicate resources based on the cluster profiles: the **Risk/Inefficiency Cluster (e.g., Cluster 3)**-characterized by high variance and low savings—becomes the primary target for specialized audit teams.
         - **Efficiency:** This method eliminates the waste of auditing stable, low-risk projects.
-        """)
+        </div>
+        """,unsafe_allow_html=True)
 
     with col_c2:
         st.success("Operational Profile Benchmarking")
 
         st.markdown("""
+        <div class='glass-card'>
         By analyzing the **inverse-transformed centroids**, the DPWH gains concrete, non-scaled benchmarks for each cluster type:
 
         - **Example:** Officials can benchmark a new project against the **average cost, average duration, and average savings** of its corresponding cluster profile (e.g., "Medium-Scale, On-Track").
         - **Contractor Review:** This allows for easy identification of contractors whose performance consistently pushes projects into the volatile, high-risk clusters.
-        """)
+        </div>
+        """,unsafe_allow_html=True)
 
 
 def render():
+    inject_global_css()
     st.title("Insights")
     st.divider()
     df = load_dataset()
     key_insights(df)
     pattern_trends(df)
     anomalies(df)
-    recommendation(df)
-    limitations()
     analysis_clustering()
     value_technique()
+    limitations()
+    recommendation(df)
